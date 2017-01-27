@@ -46,6 +46,14 @@ set -- \
 	\
 	"$@"
 
+# Naive way to check if storage driver is set
+if [ "$@" != *"-s "* ] && [ "$@" != *"--storage-driver"* ]; then
+    set -- \
+    --storage-driver=aufs \
+    \
+    "$@"
+fi
+
 workaround_lp1626019
 
 exec docker daemon "$@"
