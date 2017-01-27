@@ -109,6 +109,8 @@ parts:
     shell: bash
     shell-flags: ['-ex']
     shell-command: |
+      export GOROOT=/usr/lib/go-1.7
+      export PATH="$GOROOT/bin:$PATH"
       mkdir -p .gopath/src/github.com/docker
       ln -sfT "$PWD" .gopath/src/github.com/docker/containerd
       export GOPATH="$PWD/.gopath"
@@ -130,6 +132,8 @@ parts:
     shell: bash
     shell-flags: ['-ex']
     shell-command: |
+      export GOROOT=/usr/lib/go-1.7
+      export PATH="$GOROOT/bin:$PATH"
       mkdir -p .gopath/src/github.com/opencontainers
       ln -sfT "$PWD" .gopath/src/github.com/opencontainers/runc
       export GOPATH="$PWD/.gopath"
