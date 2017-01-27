@@ -65,6 +65,10 @@ parts:
     shell-flags: ['-eux', '-o', 'pipefail']
     shell-command: |
       apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys F1831DDAFC42E99D
+      add-apt-repository -r 'deb http://ppa.launchpad.net/snappy-dev/tools/ubuntu xenial main' ||:
+      add-apt-repository ppa:jonathonf/golang-1.7
+      apt update
+      apt install -y golang-1.7
       export GOROOT=/usr/lib/go-1.7
       export PATH="$GOROOT/bin:$PATH"
       go version
@@ -95,7 +99,6 @@ parts:
       - patch
       - git
       - pkg-config
-      - golang-1.7
     stage-packages:
       - aufs-tools
 
@@ -109,15 +112,15 @@ parts:
       mkdir -p .gopath/src/github.com/docker
       ln -sfT "$PWD" .gopath/src/github.com/docker/containerd
       export GOPATH="$PWD/.gopath"
-      
+
       make GIT_COMMIT= GIT_BRANCH= LDFLAGS=
-      
+
       install -d "$DESTDIR/bin"
       install -T bin/containerd "$DESTDIR/bin/docker-containerd"
       install -T bin/containerd-shim "$DESTDIR/bin/docker-containerd-shim"
       install -T bin/ctr "$DESTDIR/bin/docker-containerd-ctr"
     build-packages:
-      - golang-1.7
+      - golang-go
       - make
 
   runc:
@@ -130,13 +133,13 @@ parts:
       mkdir -p .gopath/src/github.com/opencontainers
       ln -sfT "$PWD" .gopath/src/github.com/opencontainers/runc
       export GOPATH="$PWD/.gopath"
-      
+
       make BUILDTAGS='seccomp apparmor selinux' COMMIT=
-      
+
       install -d "$DESTDIR/bin"
       install -T runc "$DESTDIR/bin/docker-runc"
     build-packages:
-      - golang-1.7
+      - golang-go
       - libapparmor-dev
       - libseccomp-dev
       - make
